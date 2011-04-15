@@ -1,0 +1,109 @@
+<html><script>
+// Define Extension
+var ext = {
+	bgPage: chrome.extension.getBackgroundPage(),
+
+	getTab: function(tab,callback){
+		if ( tab ) {
+			callback(tab);
+		}
+		else {
+			chrome.windows.getCurrent(function(window){
+				chrome.tabs.getSelected(window.id,function(tab){
+					callback(tab);
+				});
+			});
+		}
+	},
+
+	getKey: function(tab,callback){
+		ext.getTab(tab,function(tab){
+			var key = tab.url.replace(/(.+\:\/\/[^\/+]+).*/,'$1')+'-historyjsit-enabled';
+			callback(key);
+		});
+	},
+
+	realValue: function(value){
+		if ( value === 'false' ) {
+			value = false;
+		}
+		else if ( value === 'true' ) {
+			value = true;
+		}
+		else if ( /^[0-9]+$/.test(value) ) {
+			value = Math.parseInt(value,10);
+		}
+		else if ( /^[0-9.]+$/.test(value) ) {
+			value = Math.parseFloat(value);
+		}
+		return value;
+	},
+
+	getStatus: function(tab,callback){
+		ext.getTab(tab,function(tab){
+			ext.getKey(tab,function(key){
+				var result = tab.incognito ? ext.realValue(ext.bgPage[key]) : ext.realValue(localStorage[key]);
+				callback(result);
+			});
+		});
+	},
+
+	toggleStatus: function(tab,callback){
+		ext.getTab(tab,function(){
+			ext.getKey(tab,function(key){
+				var result;
+				if (tab.incognito) {
+					result = ext.bgPage[key] = !ext.realValue(ext.bgPage[key]);
+				}
+				else {
+					result = localStorage[key] = !ext.realValue(localStorage[key]);
+				}
+				callback(result);
+			});
+		});
+	},
+
+	messageHandler: function(request, sender, sendResponse) {
+		if ( request.action === 'isEnabled' ) {
+			ext.getStatus(false,function(result){
+				ext.updateIcon(result);
+				sendResponse({
+					result: result
+				});
+			});
+		}
+		else {
+			sendResponse({});
+		}
+	},
+
+	clickHandler: function(tab){
+		chrome.windows.get(tab.windowId,function(window){
+			ext.toggleStatus(tab,function(result){
+				ext.updateIcon(result);
+				chrome.tabs.executeScript(null, {code:'window.location.reload()'});
+			});
+		});
+	},
+
+	tabHandler: function(tabId, selectInfo){
+		chrome.tabs.get(tabId,function(tab){
+			ext.getStatus(tab,function(result){
+				ext.updateIcon(result);
+			});
+		});
+	},
+
+	updateIcon: function(result){
+		chrome.browserAction.setIcon({
+			path: result ? 'icon19.png' : 'icon19disabled.png'
+		});
+	}
+
+};
+
+// Bind Events
+chrome.extension.onRequest.addListener(ext.messageHandler);
+chrome.browserAction.onClicked.addListener(ext.clickHandler);
+chrome.tabs.onSelectionChanged.addListener(ext.tabHandler);
+</script></html>
