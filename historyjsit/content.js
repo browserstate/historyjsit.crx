@@ -11,7 +11,7 @@ chrome.extension.sendRequest(
 			document.body.appendChild(e);
 
 			e = document.createElement('script');
-			e.setAttribute('src','https://gist.github.com/raw/919358/bookmark-helper.js');
+			e.setAttribute('src', '//rawgithub.com/browserstate/ajaxify/master/ajaxify-bookmarklet-helper.js');
 			document.body.appendChild(e);
 		}
 	}

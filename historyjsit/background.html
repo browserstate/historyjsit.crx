@@ -9,7 +9,7 @@ var ext = {
 		}
 		else {
 			chrome.windows.getCurrent(function(window){
-				chrome.tabs.getSelected(window.id,function(tab){
+				chrome.tabs.getSelected(window.id, function(tab){
 					callback(tab);
 				});
 			});
@@ -87,8 +87,8 @@ var ext = {
 	},
 
 	tabHandler: function(tabId, selectInfo){
-		chrome.tabs.get(tabId,function(tab){
-			ext.getStatus(tab,function(result){
+		chrome.tabs.get(tabId, function(tab){
+			ext.getStatus(tab, function(result){
 				ext.updateIcon(result);
 			});
 		});

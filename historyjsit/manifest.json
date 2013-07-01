@@ -1,8 +1,10 @@
 {
 	"name": "History.js It!",
-	"version": "1.0",
-	"description": "History.js It! As a Google Chrome Extension\nProject Page: http://github.com/balupton/Facebook-Cleaner",
-	"update_url": "http://github.com/balupton/historyjsit.crx/raw/master/updates.xml",
+	"version": "1.1.0",
+	"manifest_version": 2,
+	"description": "History.js It! As a Google Chrome Extension",
+	"homepage_url": "https://github.com/browserstate/historyjsit.crx",
+	// "update_url": "https://github.com/browserstate/historyjsit.crx/raw/master/updates.xml",
 	"icons": {
 		"16": "icon16.png",
 		"48": "icon48.png",
@@ -17,6 +19,8 @@
 			"js": ["content.js"]
 		}
 	],
-	"permissions": ["tabs","http://*/*"],
-	"background_page": "background.html"
+	"permissions": ["tabs", "http://*/*"],
+	"background": {
+		"page": "background.html"
+	}
 }
