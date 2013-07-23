@@ -1,6 +1,6 @@
 # History.js It! Google Chrome Extension
 
-Enable [History.js](http://github.com/browserstate/history.js) for websites of your choice. It'll remember your preference and keep using History.js on that website until you tell it not to.
+Enable [History.js](http://github.com/browserstate/history.js) with the [Ajaxify script](https://github.com/browserstate/ajaxify) for websites of your choice. It'll remember your preference and keep using History.js on that website until you tell it not to.
 
 
 ## Install
